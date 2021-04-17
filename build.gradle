@@ -1,0 +1,74 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+/***
+ * 모든 프로젝트 적용 (root 포함)
+ */
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    group = 'com.code'
+    version = '0.0.1-SNAPSHOT'
+    sourceCompatibility = '11'
+
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+    // 기본 패키지 스토리지
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+/***
+ * 각각 프로젝트 설정
+ */
+project(":run-a"){
+    // jar 이름 지정
+    jar {
+        archivesBaseName = 'run-a'
+    }
+    // 버전별로 jar 생성을 위해 필요 (버전별 관리가 필요함.)
+    version '1.0.0-SNAPSHOT'
+    dependencies{
+        compile project (':core-util')
+    }
+}
+project(":run-b"){
+    // jar 이름 지정
+    jar {
+        archivesBaseName = 'run-b'
+    }
+    // 버전별로 jar 생성을 위해 필요 (버전별 관리가 필요함.)
+    version '1.0.0-SNAPSHOT'
+    dependencies{
+        compile project (':core-util')
+    }
+}
+project(":core-util"){
+    /***
+     * compile project dose not exist 오류 해결
+     * 외부 프로젝트에서 가져온 클래스를 인식못하는 문제가 있어 아래와 같이 설정
+     */
+    jar{
+        enabled = true
+    }
+}

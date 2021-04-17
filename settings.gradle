@@ -1,0 +1,2 @@
+rootProject.name = 'multi-module'
+include 'run-a', 'run-b', 'core-util'
